@@ -1,0 +1,9 @@
+{
+    "s3Info": {
+        "accessKeyId": "accessKeyId",
+        "secretAccessKey": "secretKeyId",
+        "region": "region",
+        "bucket": "bucketName"
+    },
+    "s3Url": "s3Url"
+}
