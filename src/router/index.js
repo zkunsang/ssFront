@@ -14,6 +14,7 @@ import ShopGroup from '../components/ShopGroup.vue'
 import DataTable from '../components/DataTable.vue'
 import ResourceList from '../components/ResourceList.vue'
 import DnnResource from '../components/DnnResource.vue'
+import CommonResource from '../components/CommonResource.vue'
 import Coupon from '../components/Coupon.vue'
 import UserList  from '../components/UserList.vue'
 import IpList  from '../components/IpList.vue'
@@ -158,6 +159,11 @@ function getCmsRoutes() {
         {
             path: '/dnnResource',
             component: DnnResource,
+            beforeEnter: requireAuth
+        },
+        {
+            path: '/commonResource',
+            component: CommonResource,
             beforeEnter: requireAuth
         },
         {

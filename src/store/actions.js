@@ -41,6 +41,15 @@ const actions = {
     UPDATE_DNN_RESOURCE_MANY(_, resourceList) {
         return api.dnnResource.updateMany(resourceList);
     },
+    LIST_COMMON_RESOURCE(_) {
+        return api.commonResource.list();
+    },
+    UPDATE_COMMON_RESOURCE(_, resourceList) {
+        return api.commonResource.update(resourceList);
+    },
+    UPDATE_COMMON_RESOURCE_MANY(_, resourceList) {
+        return api.commonResource.updateMany(resourceList);
+    },
     LIST_ARSTICKER_RESOURCE(_) {
         return api.arStickerResource.list();
     },

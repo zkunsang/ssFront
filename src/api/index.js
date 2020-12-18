@@ -101,6 +101,18 @@ export const dnnResource = {
   },
 }
 
+export const commonResource = {
+  list() {
+    return request('post', '/common_resource/list', null);
+  },
+  update(resourceList) {
+    return request('post', '/common_resource/update', resourceList);
+  },
+  updateMany(resourceList) {
+    return request('post', '/common_resource/updateMany', resourceList);
+  },
+}
+
 export const item = {
   list() {
     return request('post', '/item/list', {});
