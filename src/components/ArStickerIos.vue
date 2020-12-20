@@ -97,7 +97,7 @@ var crc = require('crc');
 const { s3Upload, onFileDelimiter, importCSV, exportCSV } = require('../util/fileutil');
 const { updateDataTable } = require('../util/dataTableUtil');
 
-const tableId = 'arSticker';
+const tableId = 'arStickerIos';
 
 export default {
   name: 'resourceList',
@@ -131,8 +131,8 @@ export default {
   watch: {},
   methods: {
     ...mapActions([
-      'LIST_ARSTICKER_RESOURCE',
-      'UPDATE_ARSTICKER_RESOURCE',
+      'LIST_ARSTICKER_IOS_RESOURCE',
+      'UPDATE_ARSTICKER_IOS_RESOURCE',
       'UPDATE_TABLE_VERSION',
       'GET_TABLE_VERSION'
     ]),
@@ -142,7 +142,7 @@ export default {
 
         item.storyId = this.storyId;
         
-        await s3Upload(item.file, `ARSticker/aos/${item.version}/${item.resourceId}`);
+        await s3Upload(item.file, `ARSticker/ios/${item.version}/${item.resourceId}`);
         this.updateProgress = parseInt(( parseInt(i) + 1 ) / list.length * 100);
         delete item.file;
       }
@@ -155,7 +155,7 @@ export default {
       await this.s3Uploads(this.updateList);
       await this.s3Uploads(this.insertList);
 
-      await this.UPDATE_ARSTICKER_RESOURCE({
+      await this.UPDATE_ARSTICKER_IOS_RESOURCE({
         insertList: this.insertList, 
         updateList: this.updateList, 
         storyId: this.storyId
@@ -180,7 +180,7 @@ export default {
       await this.refreshResourceList();
     },
     async refreshResourceList() {
-      this.resourceList = await this.LIST_ARSTICKER_RESOURCE();
+      this.resourceList = await this.LIST_ARSTICKER_IOS_RESOURCE();
     },
     async onFileUpload(fileList) {
       const { insertList, updateList, conflictList } 
