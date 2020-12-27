@@ -32,6 +32,12 @@ const actions = {
     LIST_AOS_RESOURCE(_) {
         return api.resource.list();
     },
+    LIST_IOS_STORY_RESOURCE(_, storyId) {
+        return api.resource_ios.list(storyId);
+    },
+    LIST_IOS_RESOURCE(_) {
+        return api.resource_ios.list();
+    },
     LIST_DNN_RESOURCE(_) {
         return api.dnnResource.list();
     },
@@ -41,11 +47,26 @@ const actions = {
     UPDATE_DNN_RESOURCE_MANY(_, resourceList) {
         return api.dnnResource.updateMany(resourceList);
     },
+    LIST_COMMON_RESOURCE(_) {
+        return api.commonResource.list();
+    },
+    UPDATE_COMMON_RESOURCE(_, resourceList) {
+        return api.commonResource.update(resourceList);
+    },
+    UPDATE_COMMON_RESOURCE_MANY(_, resourceList) {
+        return api.commonResource.updateMany(resourceList);
+    },
     LIST_ARSTICKER_RESOURCE(_) {
         return api.arStickerResource.list();
     },
     UPDATE_ARSTICKER_RESOURCE(_, resourceList) {
         return api.arStickerResource.update(resourceList);
+    },
+    LIST_ARSTICKER_IOS_RESOURCE(_) {
+        return api.arStickerResourceIos.list();
+    },
+    UPDATE_ARSTICKER_IOS_RESOURCE(_, resourceList) {
+        return api.arStickerResourceIos.update(resourceList);
     },
     UPDATE_AOS_RESOURCE(_, resourceList) {
         return api.resource.update(resourceList);
@@ -55,6 +76,15 @@ const actions = {
     },
     DELETE_AOS_RESOURCE(_, deleteInfo) {
         return api.resource.delete(deleteInfo);
+    },
+    UPDATE_IOS_RESOURCE(_, resourceList) {
+        return api.resource_ios.update(resourceList);
+    },
+    UPDATE_IOS_RESOURCE_MANY(_, resourceList) {
+        return api.resource_ios.updateMany(resourceList);
+    },
+    DELETE_IOS_RESOURCE(_, deleteInfo) {
+        return api.resource_ios.delete(deleteInfo);
     },
     LIST_ITEM({ commit }) {
         return api.item.list().then((itemList) => {

@@ -142,7 +142,7 @@ export default {
 
         item.storyId = this.storyId;
         
-        await s3Upload(item.file, `ARSticker/${item.version}/${item.resourceId}`);
+        await s3Upload(item.file, `ARSticker/aos/${item.version}/${item.resourceId}`);
         this.updateProgress = parseInt(( parseInt(i) + 1 ) / list.length * 100);
         delete item.file;
       }

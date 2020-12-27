@@ -13,7 +13,23 @@
                 활성화
             </v-col>
             <v-col>
-                <v-switch class="flag" v-model="storyData.status" :label="getStatusLabel()"></v-switch>
+                <v-radio-group v-model="storyData.status">
+                  <v-radio
+                    label="비활성화"
+                    :value="0"
+                  >
+                  </v-radio>
+                  <v-radio
+                    label="활성화"
+                    :value="1"
+                  >
+                  </v-radio>
+                  <v-radio
+                    label="구매대기"
+                    :value="2"
+                  >
+                  </v-radio>
+                </v-radio-group>
             </v-col>
             </v-row>
         </v-card>
@@ -92,6 +108,7 @@
             </v-col>
             <v-col >
               <AosUploadVue></AosUploadVue>
+              <IosUploadVue></IosUploadVue>
             </v-col>
             </v-row>
         </v-card>
@@ -111,6 +128,7 @@
 <script>
 import {mapActions, mapState} from 'vuex'
 import AosUploadVue from './AosUpload.vue';
+import IosUploadVue from './IosUpload.vue';
 
 var crc = require('crc');
 const {s3Upload} = require("../util/fileutil");
@@ -133,7 +151,8 @@ export default {
     }
   },
   components: {
-    AosUploadVue
+    AosUploadVue,
+    IosUploadVue
   },
   computed: {
     ...mapState({
@@ -222,7 +241,6 @@ export default {
       }
 
       let saveFunc = this.isNew ? this.CREATE_STORY : this.UPDATE_STORY;
-      this.storyData.status = this.storyData.status ? 1 : 0;
 
       if(this.textFile) {
         this.storyData.textFile = `${this.textFile.name}`;

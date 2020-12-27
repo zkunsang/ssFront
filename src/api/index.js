@@ -80,6 +80,21 @@ export const resource = {
   }
 }
 
+export const resource_ios = {
+  list(storyId) {
+    return request('post', '/resource_ios/list', storyId ? { storyId } : null);
+  },
+  update(resourceList) {
+    return request('post', '/resource_ios/update', resourceList);
+  },
+  updateMany(resourceList) {
+    return request('post', '/resource_ios/updateMany', resourceList);
+  },
+  delete(resoruceInfo) {
+    return request('post', '/resource_ios/delete', resoruceInfo);
+  }
+}
+
 export const arStickerResource = {
   list() {
     return request('post', '/ar_sticker/list', null);
@@ -88,6 +103,16 @@ export const arStickerResource = {
     return request('post', '/ar_sticker/update', resourceList);
   },
 }
+
+export const arStickerResourceIos = {
+  list() {
+    return request('post', '/ar_sticker_ios/list', null);
+  },
+  update(resourceList) {
+    return request('post', '/ar_sticker_ios/update', resourceList);
+  },
+}
+
 
 export const dnnResource = {
   list() {
@@ -98,6 +123,18 @@ export const dnnResource = {
   },
   updateMany(resourceList) {
     return request('post', '/dnn_resource/updateMany', resourceList);
+  },
+}
+
+export const commonResource = {
+  list() {
+    return request('post', '/common_resource/list', null);
+  },
+  update(resourceList) {
+    return request('post', '/common_resource/update', resourceList);
+  },
+  updateMany(resourceList) {
+    return request('post', '/common_resource/updateMany', resourceList);
   },
 }
 

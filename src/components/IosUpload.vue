@@ -1,5 +1,9 @@
 <template>
   <v-container>
+    <v-layout
+      text-center
+      wrap
+    >
     <v-overlay :value="uploading">
       <v-progress-circular
         v-if="this.insertList.length"
@@ -23,6 +27,9 @@
         업데이트 {{ updateProgress }}
       </v-progress-circular>
     </v-overlay>
+    <v-container>
+      <v-file-input multiple label="File input" @change="onFileUpload"></v-file-input>
+    </v-container>
     <v-container v-if="updateList.length">
       업데이트 리스트
       <v-chip v-for="item in updateList" :key="item.resourceId" color="blue">
@@ -49,101 +56,123 @@
     <v-container v-if="updateList.length || insertList.length">
       <v-btn @click="uploadFile">업로드</v-btn>
     </v-container>
-    <v-layout
-      text-center
-      wrap
-    >
+      
       <v-data-table
-        dense
         :headers="headers"
         :items="resourceList"
-        sort-by="resourceId"
+        :search="search"
+        sort-by="updateDate"
         class="elevation-1"
       >
+        <template v-slot:[`item.resourceId`]="{ item }">
+          <a :href="`${getDownloadUrl(item)}`">{{item.resourceId}}</a>
+        </template>
+        <template v-slot:[`item.patchVersion`] = "{ item }">
+          <v-icon small class="mr-2" @click="onDelete(item)"> delete </v-icon>
+        </template>
+        
         <template v-slot:top>
           <v-toolbar flat color="white">
-            <v-toolbar-title>DNN 리소스</v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider>
+            <v-toolbar-title>Ios</v-toolbar-title>
+            <v-divider
+              class="mx-4"
+              inset
+              vertical
+            ></v-divider>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              hide-details
+            ></v-text-field>
             <v-spacer></v-spacer>
           </v-toolbar>
         </template>
         <template v-slot:no-data>
-          <v-btn color="primary">Reset</v-btn>
+          <v-btn color="primary" @click="getList">Reset</v-btn>
         </template>
-      </v-data-table>
-      <v-row>
-        <v-col>
-          <v-file-input multiple label="리소스 데이터" @change="onFileUpload"></v-file-input>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-btn @click="exportCSVResource">리소스 데이터(csv)</v-btn>
-          <v-file-input accept=".csv" label="리소스 데이터(csv)" @change="importCSVResource"></v-file-input>
-        </v-col>
-      </v-row>
+        
 
+      </v-data-table>
+      <v-btn color="primary" @click="getList">Reset</v-btn>
     </v-layout>
   </v-container>
 </template>
-<script src="xlsx.full.min.js"></script>
-<script src="js/jhxlsx.js"></script>
 
 <script>
-
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import _ from 'lodash'
-
-const no_image = require(`../assets/no_image.jpg`);
+const {getS3Url, s3Upload, onFileDelimiter} = require('../util/fileutil');
+const {updateDataTable} = require('../util/dataTableUtil');
 
 var crc = require('crc');
-const { s3Upload, onFileDelimiter, importCSV, exportCSV } = require('../util/fileutil');
-const { updateDataTable } = require('../util/dataTableUtil');
-
-const tableId = 'dnnResource';
 
 export default {
-  name: 'resourceList',
+  name: 'IosUpload',
   data() {
     return {
-      insertProgress: 0,
-      updateProgress: 0,
+      search: '',
       uploading: false,
+      overlay: false,
+      updateProgress: 0,
+      insertProgress: 0,
       resourceList: [],
       updateList: [],
       insertList: [],
-      
       conflictList: [],
+      dialog: false,
+      storyId: null,
+      isNew: false,
       headers: [
-        { text: 'resourceId', value: 'resourceId' },
-        { text: 'crc32', value: 'crc32' },
-        { text: 'size', value: 'size' },
+        { text: '아이디', value: 'resourceId' },
         { text: 'version', value: 'version' },
+        { text: 'size', value: 'size' },
+        { text: 'crc32', value: 'crc32' },
         { text: 'updateDate', value: 'updateDate' },
+        { text: 'patchVersion', value: 'patchVersion' },
       ],
+      editedItem: {},
     }
   },
   async created() {
-    await this.refreshResourceList();
+    this.storyId = this.$route.params.storyId;
+    if(this.storyId) {
+      await this.getList();
+    }
+
+    this.isNew = !this.storyId;
   },
   computed: {
-    ...mapState({
-        CDN_URL: 'CDN_URL'
-    }),
+    formTitle () {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    },
   },
-  watch: {},
+  watch: {
+    dialog (val) {
+      val || this.close()
+    },
+  },
   methods: {
     ...mapActions([
-      'LIST_DNN_RESOURCE',
-      'UPDATE_DNN_RESOURCE',
-      'UPDATE_DNN_RESOURCE_MANY',
+      'LIST_IOS_RESOURCE',
+      'LIST_IOS_STORY_RESOURCE',
+      'UPDATE_IOS_RESOURCE',
+      'GET_TABLE_VERSION',
       'UPDATE_TABLE_VERSION',
-      'GET_TABLE_VERSION'
+      'DELETE_IOS_RESOURCE'
     ]),
+    getDownloadUrl(item) {
+      const {storyId, version, resourceId} = item;
+      const url = `${getS3Url()}${storyId}/ios/${version}/${resourceId}`;
+      return url;
+    },
     async s3Uploads(list) {
       for(let i in list) {
         let item = list[i];
 
         item.storyId = this.storyId;
         
-        await s3Upload(item.file, `DNN/${item.version}/${item.resourceId}`);
+        await s3Upload(item.file, `${this.storyId}/ios/${item.version}/${item.resourceId}`);
         this.updateProgress = parseInt(( parseInt(i) + 1 ) / list.length * 100);
         delete item.file;
       }
@@ -156,58 +185,52 @@ export default {
       await this.s3Uploads(this.updateList);
       await this.s3Uploads(this.insertList);
 
-      await this.UPDATE_DNN_RESOURCE({
+      await this.UPDATE_IOS_RESOURCE({
         insertList: this.insertList, 
         updateList: this.updateList, 
         storyId: this.storyId
       });
 
       this.uploading = false;
+
+      const tableId = 'resource_ios';
+
       await this.getList();
+      const totalResourceList = await this.allResourceList();
+      
       await updateDataTable(
         this.GET_TABLE_VERSION,
         null,
         this.UPDATE_TABLE_VERSION,
         tableId,
-        { resourceList: this.resourceList }
+        { resourceList: totalResourceList }
       )
     },
     async getList() {
       this.updateList = [];
       this.insertList = [];
       this.conflictList = [];
-      this.resourceList = [];
 
-      await this.refreshResourceList();
+      this.resourceList = [];
+      if(this.isNew) return;
+      this.resourceList = await this.LIST_IOS_STORY_RESOURCE(this.storyId);
     },
-    async refreshResourceList() {
-      this.resourceList = await this.LIST_DNN_RESOURCE();
+    async allResourceList() {
+      return await this.LIST_IOS_RESOURCE();
     },
     async onFileUpload(fileList) {
-      const { insertList, updateList, conflictList } 
-        = await onFileDelimiter(this.resourceList, fileList);
-
+      const { insertList, updateList, conflictList } = await onFileDelimiter(this.resourceList, fileList);
       this.insertList = insertList;
       this.updateList = updateList;
       this.conflictList = conflictList;
     },
-    importCSVResource(file) {
-      importCSV(file, 'resourceId', async (resourceList) => {
-        await updateDataTable(
-          this.GET_TABLE_VERSION,
-          this.UPDATE_DNN_RESOURCE_MANY,
-          this.UPDATE_TABLE_VERSION,
-          tableId,
-          { resourceList }
-        );
-
-        await this.refreshResourceList();
-      })
-    },
-    exportCSVResource() {
-      exportCSV(this.resourceList, 'dnnResource.csv');
-    },
+    async onDelete(item) {
+      const storyId = this.storyId;
+      const resourceId = item.resourceId;
+      
+      await this.DELETE_IOS_RESOURCE({ storyId, resourceId });
+      await this.getList();
+    }
   }
-  
 };
 </script>

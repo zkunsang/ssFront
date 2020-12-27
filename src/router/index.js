@@ -7,6 +7,7 @@ import SignIn from '../components/SignIn.vue'
 import StoryList from '../components/StoryList.vue'
 import StoryInfo from '../components/StoryInfo.vue'
 import AosUpload from '../components/AosUpload.vue'
+import IosUpload from '../components/IosUpload.vue'
 import ItemList from '../components/ItemList.vue'
 import ItemCategory from '../components/ItemCategory.vue'
 import Shop from '../components/Shop.vue'
@@ -14,6 +15,7 @@ import ShopGroup from '../components/ShopGroup.vue'
 import DataTable from '../components/DataTable.vue'
 import ResourceList from '../components/ResourceList.vue'
 import DnnResource from '../components/DnnResource.vue'
+import CommonResource from '../components/CommonResource.vue'
 import Coupon from '../components/Coupon.vue'
 import UserList  from '../components/UserList.vue'
 import IpList  from '../components/IpList.vue'
@@ -22,6 +24,7 @@ import PushMessage  from '../components/PushMessage.vue'
 import TempEvent from '../components/TempEvent.vue'
 import AppVersion  from '../components/AppVersion.vue'
 import ArSticker  from '../components/ArSticker.vue'
+import ArStickerIos  from '../components/ArStickerIos.vue'
 
 import Home from '../components/Home.vue'
 
@@ -123,6 +126,11 @@ function getCmsRoutes() {
             beforeEnter: requireAuth
         },
         {
+            path: '/ios_upload',
+            component: IosUpload,
+            beforeEnter: requireAuth
+        },
+        {
             path: '/story',
             component: StoryList,
             beforeEnter: requireAuth
@@ -168,10 +176,19 @@ function getCmsRoutes() {
             beforeEnter: requireAuth
         },
         {
+            path: '/commonResource',
+            component: CommonResource,
+            beforeEnter: requireAuth
+        },
+        {
             path: '/arSticker',
             component: ArSticker,
             beforeEnter: requireAuth
-            
+        },
+        {
+            path: '/arStickerIos',
+            component: ArStickerIos,
+            beforeEnter: requireAuth
         },
         {
             path: '/coupon',

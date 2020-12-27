@@ -62,7 +62,7 @@
       >
         <template v-slot:top>
           <v-toolbar flat color="white">
-            <v-toolbar-title>DNN 리소스</v-toolbar-title>
+            <v-toolbar-title>공용 리소스</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
           </v-toolbar>
@@ -97,7 +97,7 @@ var crc = require('crc');
 const { s3Upload, onFileDelimiter, importCSV, exportCSV } = require('../util/fileutil');
 const { updateDataTable } = require('../util/dataTableUtil');
 
-const tableId = 'dnnResource';
+const tableId = 'commonResource';
 
 export default {
   name: 'resourceList',
@@ -131,9 +131,9 @@ export default {
   watch: {},
   methods: {
     ...mapActions([
-      'LIST_DNN_RESOURCE',
-      'UPDATE_DNN_RESOURCE',
-      'UPDATE_DNN_RESOURCE_MANY',
+      'LIST_COMMON_RESOURCE',
+      'UPDATE_COMMON_RESOURCE',
+      'UPDATE_COMMON_RESOURCE_MANY',
       'UPDATE_TABLE_VERSION',
       'GET_TABLE_VERSION'
     ]),
@@ -143,7 +143,7 @@ export default {
 
         item.storyId = this.storyId;
         
-        await s3Upload(item.file, `DNN/${item.version}/${item.resourceId}`);
+        await s3Upload(item.file, `CommonResource/${item.version}/${item.resourceId}`);
         this.updateProgress = parseInt(( parseInt(i) + 1 ) / list.length * 100);
         delete item.file;
       }
@@ -156,7 +156,7 @@ export default {
       await this.s3Uploads(this.updateList);
       await this.s3Uploads(this.insertList);
 
-      await this.UPDATE_DNN_RESOURCE({
+      await this.UPDATE_COMMON_RESOURCE({
         insertList: this.insertList, 
         updateList: this.updateList, 
         storyId: this.storyId
@@ -181,7 +181,7 @@ export default {
       await this.refreshResourceList();
     },
     async refreshResourceList() {
-      this.resourceList = await this.LIST_DNN_RESOURCE();
+      this.resourceList = await this.LIST_COMMON_RESOURCE();
     },
     async onFileUpload(fileList) {
       const { insertList, updateList, conflictList } 
@@ -195,7 +195,7 @@ export default {
       importCSV(file, 'resourceId', async (resourceList) => {
         await updateDataTable(
           this.GET_TABLE_VERSION,
-          this.UPDATE_DNN_RESOURCE_MANY,
+          this.UPDATE_COMMON_RESOURCE_MANY,
           this.UPDATE_TABLE_VERSION,
           tableId,
           { resourceList }
