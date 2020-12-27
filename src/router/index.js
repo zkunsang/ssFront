@@ -19,6 +19,7 @@ import UserList  from '../components/UserList.vue'
 import IpList  from '../components/IpList.vue'
 import ServerStatus  from '../components/ServerStatus.vue'
 import PushMessage  from '../components/PushMessage.vue'
+import TempEvent from '../components/TempEvent.vue'
 import AppVersion  from '../components/AppVersion.vue'
 import ArSticker  from '../components/ArSticker.vue'
 
@@ -91,6 +92,12 @@ function getUmsRoutes() {
             beforeEnter: requireAuth,
             component: PushMessage
         },
+        {
+            path: '/temp_event',
+            beforeEnter: requireAuth,
+            component: TempEvent
+        },
+        
     ]
 }
 

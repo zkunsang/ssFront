@@ -191,6 +191,13 @@ const actions = {
     INSERT_PUSH_MESSAGE(_, message) {
         console.log(message);
         return api.pushMessage.create(message);
+    },
+
+    GET_TEMP_EVENT(_) {
+        return api.tempEvent.list();
+    },
+    INSERT_TEMP_EVENT(_, tempEvent) {
+        return api.tempEvent.create(tempEvent);
     }
 }
 

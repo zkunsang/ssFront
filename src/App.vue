@@ -82,6 +82,7 @@ function getUmsList() {
     { path: '/iplist', title: '아이피 관리', icon: 'mdi-view-dashboard' },
     { path: '/server', title: '서버 관리', icon: 'mdi-view-dashboard' },
     { path: '/push_message', title: '푸쉬 메시지', icon: 'mdi-view-dashboard' },
+    { path: '/temp_event', title: '임시 베타 이벤트', icon: 'mdi-view-dashboard' },
   ]
 }
 

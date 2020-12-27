@@ -275,3 +275,12 @@ export const pushMessage = {
     return request('post', '/push/create', item);
   }
 }
+
+export const tempEvent = {
+  list() {
+    return request('post', '/tempEvent/list');
+  },
+  create(item) {
+    return request('post', '/tempEvent/create', item);
+  } 
+}
