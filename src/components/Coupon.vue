@@ -261,7 +261,11 @@ export default {
     onEditCoupon(item) {
       this.dialog = true;
       this.editCoupon = Object.assign({}, item);
-      this.editCouponRewardList = [...this.couponRewardMap[this.editCoupon.couponId]];
+      this.editCouponRewardList = 
+        this.couponRewardMap[this.editCoupon.couponId] 
+          ? [...this.couponRewardMap[this.editCoupon.couponId]] 
+          : [];
+
     },
     addReward() {
       if(!this.addItem.itemId)
@@ -285,6 +289,10 @@ export default {
         couponInfo,
         couponRewardList: this.editCouponRewardList
       });
+
+      this.editCouponRewardList = [];
+      this.dialog = false;
+      this.getCouponList();
     },
     editCancel() {
       this.dialog = false;
