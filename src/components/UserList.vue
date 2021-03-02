@@ -85,6 +85,9 @@
                   v-model="editedItem.fcmToken"
                   label="fcmToken"
                 ></v-text-field>
+                <v-btn
+                  @click="onQuestDelete"
+                >퀘스트 삭제</v-btn>
               </v-col>
             </v-row>
             <v-row>
@@ -268,7 +271,8 @@ export default {
     ...mapActions([
       'GET_USER_LIST',
       'GET_USER_INVENTORY',
-      'USER_EDIT'
+      'USER_EDIT',
+      'QUEST_DELETE'
     ]),
     async getUserList() {
       const body = await this.GET_USER_LIST();
@@ -345,6 +349,11 @@ export default {
       const reason = this.editedItem.reason;
       const userInfo = { uid, inventory, reason };
       await this.USER_EDIT(userInfo);
+    },
+    async onQuestDelete() {
+      const uid = this.editUid;
+      
+      await this.QUEST_DELETE({uid});
     }
   }
 };

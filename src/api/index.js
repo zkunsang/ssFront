@@ -270,6 +270,15 @@ export const couponCode = {
   }
 }
 
+export const questStory = {
+  list(questStory) {
+    return request('post', '/quest_story/list', questStory);
+  },
+  updateMany(questStory) {
+    return request('post', '/quest_story/updateMany', questStory);
+  }
+}
+
 export const user = {
   list(item) {
     return request('post', '/user/list', item);
@@ -320,4 +329,10 @@ export const tempEvent = {
   create(item) {
     return request('post', '/tempEvent/create', item);
   } 
+}
+
+export const userquest = {
+  delete(userInfo) {
+    return request('post', '/userquest/delete', userInfo);
+  }
 }

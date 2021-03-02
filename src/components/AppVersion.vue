@@ -134,8 +134,8 @@ export default {
     async getVersionList() {
       const versionInfo = await this.GET_VERSION_LIST();
       console.log(versionInfo);
-      this.aosVersion = versionInfo["aosAppVersion"].value;
-      this.iosVersion = versionInfo["iosAppVersion"].value;
+      if(versionInfo["aosAppVersion"]) this.aosVersion = versionInfo["aosAppVersion"].value;
+      if(versionInfo["iosAppVersion"]) this.iosVersion = versionInfo["iosAppVersion"].value;
     }
   }
 };

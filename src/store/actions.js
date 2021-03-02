@@ -188,7 +188,14 @@ const actions = {
         return api.couponCode.insert(item);
     },
 
-    // UMS
+    LIST_QUEST_STORY() {
+        return api.questStory.list(item);
+    },
+    UPDATE_MANY_QUEST_STORY(_, item) {
+        return api.questStory.updateMany(item);
+    },
+
+    // UMS 
     GET_USER_LIST(_, item) {
         return api.user.list(item);
     },
@@ -228,6 +235,10 @@ const actions = {
     },
     INSERT_TEMP_EVENT(_, tempEvent) {
         return api.tempEvent.create(tempEvent);
+    },
+
+    QUEST_DELETE(_, userInfo) {
+        return api.userquest.delete(userInfo);
     }
 }
 

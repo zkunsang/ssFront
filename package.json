@@ -12,6 +12,8 @@
     "umsDev": "env NODE_ENV=umsDev vue-cli-service serve",
     "buildUmsLive": "env NODE_ENV=umsLive vue-cli-service build --dest umsLive",
     "buildCmsLive": "env NODE_ENV=cmsLive vue-cli-service build --dest cmsLive",
+    "buildUmsDev": "env NODE_ENV=umsDev vue-cli-service build --dest umsDev",
+    "buildCmsDev": "env NODE_ENV=cmsDev vue-cli-service build --dest cmsDev",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
