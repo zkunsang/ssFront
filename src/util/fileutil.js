@@ -6,6 +6,7 @@ const XLSX = require("xlsx");
 
 const { s3Info, s3Url } = require(`../config/${process.env.NODE_ENV}/s3.json`);
 const s3Source = new AWS.S3(s3Info);
+console.log(`s3Info - ${Object.values(s3Info)}`);
 
 const bucketRegion = "ap-northeast-2";
 AWS.config.update({ region: bucketRegion });
@@ -22,9 +23,11 @@ function getS3Url() {
 async function s3Upload(inputFile, key) {
   const param = { Bucket: s3Info.bucket, Key: key, Body: inputFile };
 
-  const s3UploadPromise = new Promise(function(resolve, reject) {
-    s3Source.upload(param, function(err, data) {
+  const s3UploadPromise = new Promise(function (resolve, reject) {
+    console.log(`param ---- ${Object.values(param)}`);
+    s3Source.upload(param, function (err, data) {
       if (err) {
+        console.log(`err----${err}`);
         reject(err);
         throw err;
       }
@@ -53,7 +56,7 @@ function exportTxt(fileContents, fileName) {
 }
 
 function exportPurgeTxt(purge_list, fileName) {
-  purge_list = purge_list.map((item) => `story/${item}`);
+  purge_list = purge_list.map((item) => `story / ${item}`);
   purge_list = [...new Set(purge_list)];
   exportTxt(purge_list.join("\r\n"), fileName);
 }
@@ -78,7 +81,7 @@ function importExcel(file, fn) {
     });
   };
 
-  reader.onerror = function(ex) {
+  reader.onerror = function (ex) {
     console.log(ex);
   };
   reader.readAsBinaryString(file);
@@ -100,6 +103,8 @@ async function _readExcel(file, sheetReader, callback) {
     const retData = {};
     var data = e.target.result;
     var workbook = XLSX.read(data, { type: "binary" });
+    console.log(workbook);
+    console.log(workbook.SheetNames);
 
     workbook.SheetNames.forEach(async (sheetName) => {
       var jsonObject = XLSX.utils.sheet_to_json(
@@ -112,7 +117,7 @@ async function _readExcel(file, sheetReader, callback) {
     callback(retData);
   };
 
-  reader.onerror = function(ex) {
+  reader.onerror = function (ex) {
     console.log(ex);
   };
 

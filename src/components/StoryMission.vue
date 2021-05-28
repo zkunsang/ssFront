@@ -62,10 +62,8 @@ export default {
         return;
       }
 
-      
       const result = await readExcel(textFile, questParser);
-      console.log(result);
-      await this.UPDATE_MANY_QUEST_STORY({...result , storyId: this.storyId});
+      await this.UPDATE_MANY_QUEST_STORY({ ...result, storyId: this.storyId });
     },
 
     getTextFileUrl() {
