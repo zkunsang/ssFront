@@ -36,6 +36,7 @@ export default {
         { type: "aos", title: "aos", path: "aos" },
         { type: "ios", title: "ios", path: "ios" },
         { type: "mission", title: "미션", path: "mission" },
+        { type: "tzaos", title: "tzaos", path: "tzaos" },
       ],
       storyId: null,
     };

@@ -9,6 +9,7 @@ import StoryInfoTab from "../components/StoryInfoTab.vue";
 import StoryInfo from "../components/StoryInfo.vue";
 import AosUpload from "../components/AosUpload.vue";
 import IosUpload from "../components/IosUpload.vue";
+import TZAosUpload from "../components/TZAosUpload.vue";
 import ItemList from "../components/ItemList.vue";
 import ItemCategory from "../components/ItemCategory.vue";
 import Shop from "../components/Shop.vue";
@@ -210,6 +211,7 @@ function getCmsRoutes() {
         { path: "aos", component: AosUpload },
         { path: "ios", component: IosUpload },
         { path: "mission", component: Mission },
+        { path: "tzaos", component: TZAosUpload },
       ],
     },
     {
