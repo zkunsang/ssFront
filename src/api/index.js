@@ -84,6 +84,9 @@ export const resource = {
   delete(resoruceInfo) {
     return request("post", "/resource/delete", resoruceInfo);
   },
+  resetCrc(storyId) {
+    return request("post", "/resource/resetcrc", { storyId });
+  },
 };
 
 export const tzresource = {
@@ -113,6 +116,9 @@ export const resource_ios = {
   },
   delete(resoruceInfo) {
     return request("post", "/resource_ios/delete", resoruceInfo);
+  },
+  resetCrc(storyId) {
+    return request("post", "/resource_ios/resetcrc", { storyId });
   },
 };
 

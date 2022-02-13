@@ -82,6 +82,9 @@ const actions = {
   DELETE_AOS_RESOURCE(_, deleteInfo) {
     return api.resource.delete(deleteInfo);
   },
+  RESET_AOS_CRC32(_, storyId) {
+    return api.resource.resetCrc(storyId);
+  },
   LIST_IOS_RESOURCE(_) {
     return api.resource_ios.list();
   },
@@ -97,7 +100,9 @@ const actions = {
   DELETE_IOS_RESOURCE(_, deleteInfo) {
     return api.resource_ios.delete(deleteInfo);
   },
-
+  RESET_IOS_CRC32(_, storyId) {
+    return api.resource_ios.resetCrc(storyId);
+  },
   LIST_ITEM({ commit }) {
     return api.item.list().then((itemList) => {
       commit("SET_ITEM_DATA_LIST", itemList);
