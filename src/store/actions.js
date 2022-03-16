@@ -82,6 +82,9 @@ const actions = {
   DELETE_AOS_RESOURCE(_, deleteInfo) {
     return api.resource.delete(deleteInfo);
   },
+  DELETE_MANY_AOS_RESOURCE(_, storyId) {
+    return api.resource.deleteMany(storyId);
+  },
   RESET_AOS_CRC32(_, storyId) {
     return api.resource.resetCrc(storyId);
   },
@@ -99,6 +102,9 @@ const actions = {
   },
   DELETE_IOS_RESOURCE(_, deleteInfo) {
     return api.resource_ios.delete(deleteInfo);
+  },
+  DELETE_MANY_IOS_RESOURCE(_, storyId) {
+    return api.resource_ios.deleteMany(storyId);
   },
   RESET_IOS_CRC32(_, storyId) {
     return api.resource_ios.resetCrc(storyId);

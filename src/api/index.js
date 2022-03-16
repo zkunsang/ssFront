@@ -84,6 +84,9 @@ export const resource = {
   delete(resoruceInfo) {
     return request("post", "/resource/delete", resoruceInfo);
   },
+  deleteMany(storyId) {
+    return request("post", "/resource/deleteMany", { storyId });
+  },
   resetCrc(storyId) {
     return request("post", "/resource/resetcrc", { storyId });
   },
@@ -116,6 +119,9 @@ export const resource_ios = {
   },
   delete(resoruceInfo) {
     return request("post", "/resource_ios/delete", resoruceInfo);
+  },
+  deleteMany(storyId) {
+    return request("post", "/resource_ios/deleteMany", { storyId });
   },
   resetCrc(storyId) {
     return request("post", "/resource_ios/resetcrc", { storyId });

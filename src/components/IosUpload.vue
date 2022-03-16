@@ -93,7 +93,7 @@
           <v-btn color="primary" @click="getList">Reset</v-btn>
         </template>
       </v-data-table>
-      <v-btn color="primary" @click="resetCrc32">ResetCrc32</v-btn>
+      <v-btn color="primary" @click="deleteMany">DeleteResources</v-btn>
     </v-layout>
   </v-container>
 </template>
@@ -160,6 +160,7 @@ export default {
       "GET_TABLE_VERSION",
       "UPDATE_TABLE_VERSION",
       "DELETE_IOS_RESOURCE",
+      "DELETE_MANY_IOS_RESOURCE",
     ]),
     getDownloadUrl(item) {
       const { storyId, version, resourceId } = item;
@@ -208,11 +209,15 @@ export default {
         storyId: this.storyId,
       });
 
-      this.uploading = false;
       await this.tableDataUpdate();
+      this.uploading = false;
     },
     async resetCrc32() {
       await this.RESET_IOS_CRC32(this.storyId);
+      await this.tableDataUpdate();
+    },
+    async deleteMany() {
+      await this.DELETE_MANY_IOS_RESOURCE(this.storyId);
       await this.tableDataUpdate();
     },
     async getList() {

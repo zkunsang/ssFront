@@ -72,9 +72,11 @@
         <template v-slot:[`item.resourceId`]="{ item }">
           <a :href="`${getDownloadUrl(item)}`">{{ item.resourceId }}</a>
         </template>
+        <!-- 
         <template v-slot:[`item.patchVersion`]="{ item }">
           <v-icon small class="mr-2" @click="onDelete(item)"> delete </v-icon>
-        </template>
+        </template> 
+        -->
 
         <template v-slot:top>
           <v-toolbar flat color="white">
@@ -93,7 +95,8 @@
           <v-btn color="primary" @click="getList">Reset</v-btn>
         </template>
       </v-data-table>
-      <v-btn color="primary" @click="resetCrc32">ResetCrc32</v-btn>
+      <!-- <v-btn color="primary" @click="resetCrc32">ResetCrc32</v-btn> -->
+      <v-btn color="primary" @click="deleteMany">DeleteResources</v-btn>
     </v-layout>
   </v-container>
 </template>
@@ -153,6 +156,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      "DELETE_MANY_AOS_RESOURCE",
       "RESET_AOS_CRC32",
       "LIST_AOS_RESOURCE",
       "LIST_AOS_STORY_RESOURCE",
@@ -194,6 +198,7 @@ export default {
         storyId: this.storyId,
       });
 
+      await this.tableDataUpdate();
       this.uploading = false;
     },
     async tableDataUpdate() {
@@ -212,6 +217,10 @@ export default {
     },
     async resetCrc32() {
       await this.RESET_AOS_CRC32(this.storyId);
+      await this.tableDataUpdate();
+    },
+    async deleteMany() {
+      await this.DELETE_MANY_AOS_RESOURCE(this.storyId);
       await this.tableDataUpdate();
     },
     async getList() {
