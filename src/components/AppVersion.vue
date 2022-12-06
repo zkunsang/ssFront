@@ -38,6 +38,24 @@
             iosVersionError
           }}</v-alert>
         </v-col>
+        <v-col cols="12" sm="3" md="3">
+          <v-text-field label="ktVersion" v-model="ktVersion" disabled>
+          </v-text-field>
+        </v-col>
+        <v-col cols="12" sm="3" md="3">
+          <v-text-field
+            label="ktVersion"
+            v-model="newKTVersion"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="3" md="3">
+          <v-btn @click="applyKTVersion">적용</v-btn>
+        </v-col>
+        <v-col cols="12" sm="3" md="3">
+          <v-alert v-if="ktVersionError" type="error">{{
+            aosVersionError
+          }}</v-alert>
+        </v-col>
       </v-row>
     </v-layout>
   </v-container>
@@ -57,10 +75,13 @@ export default {
       storyData: {},
       aosVersion: "",
       iosVersion: "",
+      ktVersion: "",
       newAosVersion: "",
       newIosVersion: "",
+      newKTVersion: "",
       aosVersionError: "",
       iosVersionError: "",
+      ktVersionError: ""
     };
   },
   computed: {
@@ -105,18 +126,30 @@ export default {
 
       await this.updateVersion(this.iosVersion, this.newIosVersion, osType);
     },
+    async applyKTVersion() {
+      // 시멘틱 버져닝 관리
+      const osType = "kt";
+      if (!this.ktVersion) {
+        await this.insertVersion(this.newKTVersion, osType);
+        return;
+      }
+
+      await this.updateVersion(this.ktVersion, this.newKTVersion, osType);
+    },
     async insertVersion(version, osType) {
       console.log("insertVersion");
       const newVersion = this.parseSematicVersion(version);
       if (!newVersion) {
         if (osType === "aos") this.aosVersionError = "version을 확인하세요";
         if (osType === "ios") this.iosVersionError = "version을 확인하세요";
+        if (osType === "kt") this.ktVersionError = "version을 확인하세요";
         return;
       }
 
       await this.UPDATE_VERSION({ osType, version: newVersion.version });
       await this.getVersionList();
     },
+
     async updateVersion(version, newVersion, osType) {
       const updateVersion = this.checkVersion(version, newVersion);
       console.log("updateVersion", updateVersion);
@@ -130,21 +163,21 @@ export default {
     },
     checkVersion(version, newVersion) {
       const parsedNewVersion = this.parseSematicVersion(newVersion);
-      const parsedVersion = this.parseSematicVersion(version);
+      // const parsedVersion = this.parseSematicVersion(version);
 
-      if (parsedNewVersion == null) return null;
-      if (parsedVersion == null) return null;
+      // if (parsedNewVersion == null) return null;
+      // if (parsedVersion == null) return null;
 
-      if (parsedVersion.major > parsedNewVersion.major) return null;
-      if (parsedVersion.minor > parsedNewVersion.minor) return null;
-      if (parsedVersion.patch > parsedNewVersion.patch) return null;
+      // if (parsedVersion.major > parsedNewVersion.major) return null;
+      // if (parsedVersion.minor > parsedNewVersion.minor) return null;
+      // if (parsedVersion.patch > parsedNewVersion.patch) return null;
 
-      if (
-        parsedVersion.major == parsedNewVersion.major &&
-        parsedVersion.minor == parsedNewVersion.minor &&
-        parsedVersion.patch == parsedNewVersion.patch
-      )
-        return null;
+      // if (
+      //   parsedVersion.major == parsedNewVersion.major &&
+      //   parsedVersion.minor == parsedNewVersion.minor &&
+      //   parsedVersion.patch == parsedNewVersion.patch
+      // )
+      //   return null;
 
       return parsedNewVersion.version;
     },
@@ -171,6 +204,9 @@ export default {
         this.aosVersion = versionInfo["aosAppVersion"].value;
       if (versionInfo["iosAppVersion"])
         this.iosVersion = versionInfo["iosAppVersion"].value;
+      if (versionInfo["ktAppVersion"])
+        this.ktVersion = versionInfo["ktAppVersion"].value;
+        
     },
   },
 };
