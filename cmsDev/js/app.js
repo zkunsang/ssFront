@@ -2498,7 +2498,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /*! exports provided: backendUrl, default */
 /***/ (function(module) {
 
-eval("module.exports = JSON.parse(\"{\\\"backendUrl\\\":\\\"http://192.168.100.117:55000\\\"}\");\n\n//# sourceURL=webpack:///./src/config/cmsDev/api.json?");
+eval("module.exports = JSON.parse(\"{\\\"backendUrl\\\":\\\"http://192.168.100.147:55000\\\"}\");\n\n//# sourceURL=webpack:///./src/config/cmsDev/api.json?");
 
 /***/ }),
 
